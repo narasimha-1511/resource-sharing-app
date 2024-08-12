@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import styles from "./Auth.module.css";
 
 function SignUp() {
   const [email, setEmail] = useState("");
@@ -18,13 +19,14 @@ function SignUp() {
   };
 
   return (
-    <form onSubmit={handleSignUp}>
+    <form onSubmit={handleSignUp} className={styles.authForm}>
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
         required
+        className={styles.authInput}
       />
       <input
         type="password"
@@ -32,9 +34,12 @@ function SignUp() {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required
+        className={styles.authInput}
       />
-      <button type="submit">Sign Up</button>
-      {error && <p>{error}</p>}
+      <button type="submit" className={styles.authButton}>
+        Sign Up
+      </button>
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </form>
   );
 }
