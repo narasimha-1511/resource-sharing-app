@@ -8,6 +8,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import styles from "./resources.module.css";
+import ResourceMap from "./ResourceMap";
 
 function ResourceList() {
   const [resources, setResources] = useState([]);
@@ -15,9 +16,12 @@ function ResourceList() {
     title: "",
     description: "",
     category: "",
+    latitude: "",
+    longitude: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
+  const [viewMode, setViewMode] = useState("list");
 
   useEffect(() => {
     fetchResources();
@@ -46,10 +50,18 @@ function ResourceList() {
     try {
       await addDoc(collection(db, "resources"), {
         ...newResource,
+        latitude: parseFloat(newResource.latitude),
+        longitude: parseFloat(newResource.longitude),
         userId: auth.currentUser.uid,
         createdAt: serverTimestamp(),
       });
-      setNewResource({ title: "", description: "", category: "" });
+      setNewResource({
+        title: "",
+        description: "",
+        category: "",
+        latitude: "",
+        longitude: "",
+      });
       fetchResources();
     } catch (error) {
       console.error("Error adding resource: ", error);
@@ -101,6 +113,26 @@ function ResourceList() {
           required
           className={styles.resourceInput}
         />
+        <input
+          type="number"
+          name="latitude"
+          value={newResource.latitude}
+          onChange={handleInputChange}
+          placeholder="Latitude"
+          required
+          step="any"
+          className={styles.resourceInput}
+        />
+        <input
+          type="number"
+          name="longitude"
+          value={newResource.longitude}
+          onChange={handleInputChange}
+          placeholder="Longitude"
+          required
+          step="any"
+          className={styles.resourceInput}
+        />
         <button type="submit" className={styles.resourceButton}>
           Add Resource
         </button>
@@ -125,16 +157,33 @@ function ResourceList() {
             </option>
           ))}
         </select>
+        <button
+          onClick={() => setViewMode("list")}
+          className={styles.viewButton}
+        >
+          List View
+        </button>
+        <button
+          onClick={() => setViewMode("map")}
+          className={styles.viewButton}
+        >
+          Map View
+        </button>
       </div>
-      <ul className={styles.resourceList}>
-        {filteredResources.map((resource) => (
-          <li key={resource.id} className={styles.resourceItem}>
-            <h3>{resource.title}</h3>
-            <p>{resource.description}</p>
-            <span>Category: {resource.category}</span>
-          </li>
-        ))}
-      </ul>
+      {viewMode === "list" ? (
+        <ul className={styles.resourceList}>
+          {filteredResources.map((resource) => (
+            <li key={resource.id} className={styles.resourceItem}>
+              <h3>{resource.title}</h3>
+              <p>{resource.description}</p>
+              <span>Category: {resource.category}</span>
+              <p>Location: {resource.latitude}, {resource.longitude}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <ResourceMap resources={filteredResources} />
+      )}
     </div>
   );
 }
