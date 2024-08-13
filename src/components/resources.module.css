@@ -1,0 +1,56 @@
+.resourceContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.resourceForm {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.resourceInput,
+.resourceTextarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.resourceTextarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.resourceButton {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.resourceButton:hover {
+  background-color: #45a049;
+}
+
+.resourceList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.resourceItem {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.resourceItem h3 {
+  margin-top: 0;
+}

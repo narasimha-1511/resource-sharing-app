@@ -7,7 +7,7 @@ import {
   addDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import styles from "./Resources.module.css";
+import styles from "./resources.module.css";
 
 function ResourceList() {
   const [resources, setResources] = useState([]);
