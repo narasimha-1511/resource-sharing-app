@@ -76,3 +76,23 @@
   color: red;
   margin-top: 10px;
 }
+
+.app {
+  font-family: Arial, sans-serif;
+}
+
+.nav {
+  background-color: #333;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  margin-right: 15px;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
