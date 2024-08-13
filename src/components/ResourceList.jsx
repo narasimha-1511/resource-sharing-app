@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import styles from "./resources.module.css";
 import ResourceMap from "./ResourceMap";
+import ResourceBooking from "./ResourceBooking";
 
 function ResourceList() {
   const [resources, setResources] = useState([]);
@@ -22,6 +23,7 @@ function ResourceList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [viewMode, setViewMode] = useState("list");
+  const [selectedResource, setSelectedResource] = useState(null);
 
   useEffect(() => {
     fetchResources();
@@ -82,6 +84,16 @@ function ResourceList() {
   );
 
   const categories = [...new Set(resources.map((resource) => resource.category))];
+
+  const handleResourceSelect = (resource) => {
+    setSelectedResource(resource);
+  };
+
+  const handleBookingComplete = () => {
+    setSelectedResource(null);
+    // Optionally, refresh the resource list here
+    fetchResources();
+  };
 
   return (
     <div className={styles.resourceContainer}>
@@ -178,11 +190,24 @@ function ResourceList() {
               <p>{resource.description}</p>
               <span>Category: {resource.category}</span>
               <p>Location: {resource.latitude}, {resource.longitude}</p>
+              <button
+                onClick={() => handleResourceSelect(resource)}
+                className={styles.bookButton}
+              >
+                Book This Resource
+              </button>
             </li>
           ))}
         </ul>
       ) : (
         <ResourceMap resources={filteredResources} />
+      )}
+
+      {selectedResource && (
+        <ResourceBooking
+          resource={selectedResource}
+          onBookingComplete={handleBookingComplete}
+        />
       )}
     </div>
   );
