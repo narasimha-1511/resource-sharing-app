@@ -12,7 +12,9 @@
 }
 
 .resourceInput,
-.resourceTextarea {
+.resourceTextarea,
+.searchInput,
+.filterSelect {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -27,7 +29,7 @@
 
 .resourceButton {
   padding: 10px 20px;
-  background-color: #4caf50;
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 3px;
@@ -53,4 +55,19 @@
 
 .resourceItem h3 {
   margin-top: 0;
+}
+
+.searchFilter {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.filterSelect {
+  width: 200px;
 }

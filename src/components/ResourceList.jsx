@@ -16,6 +16,8 @@ function ResourceList() {
     description: "",
     category: "",
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
 
   useEffect(() => {
     fetchResources();
@@ -54,6 +56,21 @@ function ResourceList() {
     }
   };
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleFilterChange = (e) => {
+    setFilterCategory(e.target.value);
+  };
+
+  const filteredResources = resources.filter((resource) =>
+    resource.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (filterCategory === "" || resource.category === filterCategory)
+  );
+
+  const categories = [...new Set(resources.map((resource) => resource.category))];
+
   return (
     <div className={styles.resourceContainer}>
       <h2>Available Resources</h2>
@@ -88,8 +105,29 @@ function ResourceList() {
           Add Resource
         </button>
       </form>
+      <div className={styles.searchFilter}>
+        <input
+          type="text"
+          placeholder="Search resources..."
+          value={searchTerm}
+          onChange={handleSearch}
+          className={styles.searchInput}
+        />
+        <select
+          value={filterCategory}
+          onChange={handleFilterChange}
+          className={styles.filterSelect}
+        >
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
       <ul className={styles.resourceList}>
-        {resources.map((resource) => (
+        {filteredResources.map((resource) => (
           <li key={resource.id} className={styles.resourceItem}>
             <h3>{resource.title}</h3>
             <p>{resource.description}</p>
