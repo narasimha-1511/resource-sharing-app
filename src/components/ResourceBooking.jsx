@@ -7,6 +7,7 @@ function ResourceBooking({ resource, onBookingComplete }) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleBooking = async (e) => {
     e.preventDefault();
@@ -15,22 +16,26 @@ function ResourceBooking({ resource, onBookingComplete }) {
       return;
     }
 
-    // Check if the resource is available for the selected dates
-    const bookingsRef = collection(db, 'bookings');
-    const q = query(
-      bookingsRef,
-      where('resourceId', '==', resource.id),
-      where('startDate', '<=', endDate),
-      where('endDate', '>=', startDate)
-    );
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-      setError('This resource is not available for the selected dates');
-      return;
-    }
+    setIsLoading(true);
+    setError('');
 
     try {
+      // Check if the resource is available for the selected dates
+      const bookingsRef = collection(db, 'bookings');
+      const q = query(
+        bookingsRef,
+        where('resourceId', '==', resource.id),
+        where('startDate', '<=', endDate),
+        where('endDate', '>=', startDate)
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        setError('This resource is not available for the selected dates');
+        setIsLoading(false);
+        return;
+      }
+
       await addDoc(collection(db, 'bookings'), {
         resourceId: resource.id,
         userId: auth.currentUser.uid,
@@ -40,10 +45,12 @@ function ResourceBooking({ resource, onBookingComplete }) {
       });
       setStartDate('');
       setEndDate('');
-      setError('');
       onBookingComplete();
     } catch (error) {
-      setError('Error booking resource: ' + error.message);
+      console.error('Error booking resource: ', error);
+      setError('An error occurred while booking the resource. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,6 +64,7 @@ function ResourceBooking({ resource, onBookingComplete }) {
           onChange={(e) => setStartDate(e.target.value)}
           required
           className={styles.dateInput}
+          disabled={isLoading}
         />
         <input
           type="date"
@@ -64,8 +72,11 @@ function ResourceBooking({ resource, onBookingComplete }) {
           onChange={(e) => setEndDate(e.target.value)}
           required
           className={styles.dateInput}
+          disabled={isLoading}
         />
-        <button type="submit" className={styles.bookButton}>Book Resource</button>
+        <button type="submit" className={styles.bookButton} disabled={isLoading}>
+          {isLoading ? 'Booking...' : 'Book Resource'}
+        </button>
       </form>
       {error && <p className={styles.error}>{error}</p>}
     </div>
