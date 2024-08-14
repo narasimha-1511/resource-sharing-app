@@ -1,0 +1,40 @@
+.profileContainer {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .profileForm {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profileInput,
+  .profileTextarea {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .profileTextarea {
+    height: 100px;
+    resize: vertical;
+  }
+  
+  .profileButton {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .profileButton:hover {
+    background-color: #45a049;
+  }
+  
+  .profileInfo p {
+    margin-bottom: 10px;
+  }
